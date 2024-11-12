@@ -15,8 +15,15 @@
 const getAllContacts = (req, res) =>{
   //Try-catch block
   try {
-    //fetchng all Dataset frm ContactModel
-    let contacts = ContactModel.getAll();
+
+    //fetchng all Dataset frm ContactModel ------
+    let contacts = ContactModel.getAllContacts();
+  
+    //IF statemtn to handle empty or null data
+    if(!contacts || contacts.length === 0){
+      return res.status(404).json({ message: 'NO Contact data found.'});
+    }
+
 
     // -------  FILTERING --> filterContacts( dataset, by, operator, value ) -> array
 //This function returns a filtered dataset of Contacts based on the provided filtering arguments.
@@ -57,7 +64,7 @@ const getAllContacts = (req, res) =>{
     }
 
   // Apply sorting --> IF params are valid
-    contacts = SortContacts(contacts, sortBy, sortDirection);
+    contacts = sortContacts(contacts, sortBy, sortDirection);
 
  // -------- PAGINATION ------> Pager( dataset, page, limit )
 
@@ -80,6 +87,7 @@ const getAllContacts = (req, res) =>{
     res.json(pager.results());
 
   } catch (error) {
+    console.error("error in getAllContacts:", error);
       //switch-case blocks
     switch (error.name) {
     case "InvalidContactError":
@@ -111,7 +119,7 @@ const getContactById = (req, res) =>{
     };
 
     //fecth contac by ID
-    const contact = ContactModel.get(contactId);
+    const contact = ContactModel.getById(contactId);
 
     //---> New Validaiton
     if(!contact){
@@ -123,6 +131,7 @@ const getContactById = (req, res) =>{
 
 
   } catch (error) {
+    console.error("Error in getContactById:",error);
     //swtich case blocks
     
     switch(error.name){
@@ -138,29 +147,34 @@ const getContactById = (req, res) =>{
   }
 };
 
-//    --- POST -  / create new Contact
+//    --- POST -  / create new Contact ----------------------------------------------
 
 const createContact = (req, res) => {
-   //try catcjh block
   try {
-    //VALIDATE before adding new contact ---- using @libray fucntion to handle valdite 
-    
+    const { fname, lname, email, phone } = req.body;
+
+    // NEEDE to add validation ---> input fields
+    if (!fname || !lname || !email || !phone) {
+      return res.status(400).json({ message: "All fields (fname, lname, email, phone) are required." });
+    }
+
     ContactModel.validate(req.body);
-
-    //create new variable to hodl new contact dataset
-
     const newContact = ContactModel.create(req.body);
 
-    //resposne stasus for succes ==> 303: after new submit --> redirect to new created Contact endpoint
-    
+    // Checks--> newContact creates= successfully
+    if (!newContact || !newContact.id) {
+      return res.status(500).json({ message: "Failed to create contact." });
+    }
+
     res.status(303)
-      .set('Location', `/contacts/${newContact.id}`)
+      .set('Location', `/api/v1/contacts/${newContact.id}`)
       .json({
         message: 'Contact created successfully',
         id: newContact.id,
-        contact: newContact,
-      });  
+        contact: newContact
+      });
   } catch (error) {
+    console.error('Error is createContact', error);
     switch (error.name) {
       case "InvalidContactFieldError":
         return res.status(400).json({ message: "Field Error: Invalid field detected --> Please check your input." });
@@ -173,7 +187,7 @@ const createContact = (req, res) => {
       case "InvalidContactError":
         return res.status(400).json({ message: "Invalid contact data --> Please verify all fields." });
       default:
-        return res.status(500).json({ message: "Internal Server Error --> Please try again." });
+        return res.status(500).json({ message: "Internal Server Error --> Please try again.", error: error.message });
     }
   }
 };
@@ -190,6 +204,7 @@ const updateContact = (req, res) => {
     res.status(204).send();
 
   } catch (error) {
+    console.error("Error in updateContact:", error);
     //switch/case blocks
     switch(error.name){
         //similar to GET by ID - but change --> UPDATING by ID now----
@@ -226,6 +241,7 @@ const deleteContact = (req, res) => {
     res.status(303).set('Location', '/contacts').json({ message: "Contact deleted successfully." });
 
   } catch (error) {
+    console.error("Erro in deleteContact",error);
     // switch case block
     switch (error.name) {
       case "ContactNotFoundError":
