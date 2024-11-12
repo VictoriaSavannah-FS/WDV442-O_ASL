@@ -8,7 +8,7 @@ describe('Contacts API Tests', () => {
   // GET all contacts-->> pagination, sorting, and filtering
   it('GET /contacts - should return paginated list of contacts', async () => {
     const response = await request(app)
-      .get('/contacts')
+      .get('/api/v1/contacts')
       .set('X-Filter-By', 'fname')
       .set('X-Filter-Operator', 'eq')
       .set('X-Filter-Value', 'John')
@@ -31,7 +31,7 @@ describe('Contacts API Tests', () => {
     };
 
     const response = await request(app)
-      .post('/contacts')
+      .post('/api/v1/contacts')
       .send(newContact);
 
     expect(response.status).toBe(303);
@@ -41,7 +41,7 @@ describe('Contacts API Tests', () => {
   // GET by ID - Test
   it('GET /contacts/:id - should return a contact by ID', async () => {
     const contactId = 1; // need to replaces w/ ID from dataset
-    const response = await request(app).get(`/contacts/${contactId}`);
+    const response = await request(app).get(`/api/v1/contacts/${contactId}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('fname');
     expect(response.body).toHaveProperty('lname');
@@ -53,7 +53,7 @@ describe('Contacts API Tests', () => {
     const updatedContact = { fname: 'UpdatedName' };
 
     const response = await request(app)
-      .put(`/contacts/${contactId}`)
+      .put(`/api/v1/contacts/${contactId}`)
       .send(updatedContact);
 
     expect(response.status).toBe(204);
@@ -62,7 +62,7 @@ describe('Contacts API Tests', () => {
   // DELTET by ID ----
   it('DELETE /contacts/:id - should delete a contact', async () => {
     const contactId = 1;
-    const response = await request(app).delete(`/contacts/${contactId}`);
+    const response = await request(app).delete(`/api/v1/contacts/${contactId}`);
     expect(response.status).toBe(303);
     expect(response.headers.location).toBe('/contacts');
   });

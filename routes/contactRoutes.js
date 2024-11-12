@@ -2,13 +2,15 @@ const express = require('express');
 const router = express.Router();
 
 // Importing the controller functions --> @jworkman
-const {
+
+  const {
   getAllContacts,
   getContactById,
   createContact,
   updateContact,
-  deleteContact
+  deleteContact,
 } = require('../controllers/contactController');
+
 
 // GET all contacts >> key feaurest: filtering-sorting-pagination
 router.get('/contacts', getAllContacts);
