@@ -31,4 +31,5 @@ services:
       DB_PASSWORD=root
       DB_NAME=spaceapidb
       DB_DIALECT=mysql
+      //if i understadn correctly--> the next line allows the docker is update -- all new migrations --> apply to MYSQL db --> was doing some diggin and usually goo dfor developmnt process not so much for production . wanted to try it but let me know if i shoul or shohuldn't do this. 
     command: sh -c "npx sequelize-cli db:migrate && npm start"
