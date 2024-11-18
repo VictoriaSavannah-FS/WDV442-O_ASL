@@ -1,21 +1,18 @@
-#Need to ensure both MySQL Database and my Node.js will talk to e/a other
+version: '3.8'
 
-#from github reference:
-version: "3.8":
-# defines--> containers Docekr will create
 services:
   db:
-    image: mysql:latest #pulls latest MySQL img from docekr hub
-    ports:
-      -"3306:3306" #b/c MySQL listens here by default
-    restart: always #ensures container starts if crahses/stoped
+    image: mysql:latest
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_DATABASE: spaceapidb
+    ports:
+      - "3306:3306"
     volumes:
-      -./mysql_data:/var/lib/mysql
+      - ./mysql_data:/var/lib/mysql
 
   app:
     build: .
@@ -24,12 +21,12 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      -db 
+      - db
     environment:
-      DB_HOST=db
-      DB_USER=root
-      DB_PASSWORD=root
-      DB_NAME=spaceapidb
-      DB_DIALECT=mysql
-      //if i understadn correctly--> the next line allows the docker is update -- all new migrations --> apply to MYSQL db --> was doing some diggin and usually goo dfor developmnt process not so much for production . wanted to try it but let me know if i shoul or shohuldn't do this. 
-    command: sh -c "npx sequelize-cli db:migrate && npm start"
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: spaceapidb
+      DB_DIALECT: mysql
+    # Commented out for manual control:
+    # command: sh -c "npx sequelize-cli db:migrate && npm start"
