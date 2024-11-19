@@ -1,7 +1,6 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Star extends Model {
     /**
@@ -10,23 +9,26 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      models.Star.belongsToMany(models.Planets, {
-        through:models.StarsPlanets,
-      foreignKey: 'StarId',
-      otherKey:'planetId'})
-      //had to create a new Model = join table for Star and Planet
-      //FK:in join table
-      //OK: for other table
+      // Define association
+      models.Star.belongsToMany(models.Planet, {
+        through: models.StarsPlanets, // JoinTable:Assocaiton
+        foreignKey: 'starId',         // FK:StarsPlanets->Star
+        otherKey: 'planetId',         // FK:StarsPlanets-->Planet
+      });
     }
   }
-  Star.init({
-    name: DataTypes.STRING,
-    size: DataTypes.INTEGER,
-    description: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'Star',
-  });
+
+  Star.init(
+    {
+      name: DataTypes.STRING,
+      size: DataTypes.INTEGER,
+      description: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: 'Star',
+    }
+  );
+
   return Star;
 };
