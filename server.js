@@ -24,7 +24,7 @@ app.use(express.json());
   }
 })();
 
-// Routes (we will create these later)
+// Routes--> create later --> had to create the actial modesl npx s..cli first
 const galaxyRoutes = require('./routes/galaxyRoutes');
 const starRoutes = require('./routes/starRoutes');
 const planetRoutes = require('./routes/planetRoutes');

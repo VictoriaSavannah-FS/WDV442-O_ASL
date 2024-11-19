@@ -11,15 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association 
-      models.Planet.belongsToMany(models.Stars)
+      models.Planet.belongsToMany(models.Stars, {
+        through: models.StarsPlanets,
+        foreignKey: 'planetId',
+        otherKey: 'starId',
+      })
+      //had to add the join table --> StarPlanets 
+      //FK: for jon table
+      //OK: join table key
   }
-  Planet.init({
-    name: DataTypes.STRING,
-    size: DataTypes.INTEGER,
-    description: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'Planet',
-  });
+  Planet.init(
+    {
+      name: DataTypes.STRING,
+      size: DataTypes.INTEGER,
+      description: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: 'Planet',
+    }
+  );
   return Planet;
 };
