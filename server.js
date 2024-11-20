@@ -28,11 +28,16 @@ app.use(express.json());
 const galaxyRoutes = require('./routes/galaxyRoutes');
 const starRoutes = require('./routes/starRoutes');
 const planetRoutes = require('./routes/planetRoutes');
+//ADDED the Routes to starsPlanets-join table
+const starsPlanetsRoutes = require('./routes/starsPlanetsRoutes');
 
 // Routes
 app.use('/api/galaxies', galaxyRoutes);
 app.use('/api/stars', starRoutes);
 app.use('/api/planets', planetRoutes);
+//The StarsPlanets route
+app.use('/api/starsplanets', starsPlanetsRoutes);
+
 
 // Root route
 app.get('/', (req, res) => {
