@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'starId',         // FK:StarsPlanets->Star
         otherKey: 'planetId',         // FK:StarsPlanets-->Planet
       });
+      
+      // I forgot to include the relationship/ assocaition --> Galaxy
+      models.Star.belongsTo(models.Galaxy, {
+        foreignKey: 'GalaxyId', //creates relationship-->Star/Galaxy
+      });
     }
   }
 
@@ -23,6 +28,13 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       size: DataTypes.INTEGER,
       description: DataTypes.TEXT,
+      GalaxyId:{
+        type: DataTypes.INTEGER,
+        references:{
+          model: "Galaxies",//tableName-->Galaxy
+          key: 'id',        //PK-->Galaxies table
+        },
+      },
     },
     {
       sequelize,
