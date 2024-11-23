@@ -21,50 +21,52 @@ router.get('/', async (req, res) => {
     const galaxies = await Galaxy.findAll();
     res.json(galaxies);
   }catch(error){
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error:`Error: ${error.message}`  });
   }
 });
 
-//GET BY ID --> METHOD
+// GET GALAXY BY ID
 router.get('/:id', async (req, res) => {
   try {
-    const galaxies = await Galaxy.findByPk(req.params.id);
-    if(galaxy){
-    res.json(galaxy);
-    }else{
-      res.status(404).json({error:'Sorry, Galaxy requested was not found - try again'});
+    const galaxy = await Galaxy.findByPk(req.params.id);
+    if (galaxy) {
+      res.json(galaxy);
+    } else {
+      res.status(404).json({ error: 'Galaxy not found.' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching galaxies' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
-// POST MTHD -----------
+
+// POST MTHD --> NEw Galaxy
 router.post('/', async (req, res) => {
   try{
   const newGalaxy = await Galaxy.create(req.body);
-  res.json(newGalaxy);
+  res.status(201).json(newGalaxy);
   }catch(error){
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
-//UPDATE/PUT METHD--> by id 
-
-router.put('/:id', asyn (req, res)=>{
+// PUt / UPDATE GALAXY BY ID
+router.put('/:id', async (req, res) => {
   try {
-   //ned to define the params / fields fir UPDATE -->Model fields
-    const = {name, size, description} = req.body;
+    const { name, size, description } = req.body;
     const galaxy = await Galaxy.findByPk(req.params.id);
-    //logic --> status Codes
-    if(galaxy){
-      await galaxy.update({name,sixe, description});
+
+    if (galaxy) {
+      await galaxy.update({ name, size, description });
       res.json(galaxy);
-    }else{res.status(404).json({error:'Galaxy with that ID was NOT Found.'})}
+    } else {
+      res.status(404).json({ error: 'Galaxy not found.' });
+    }
   } catch (error) {
-    res.status(500).json(error: 'Error Updating Galaxy - check the fields.');
-    })
-  }})
+    res.status(500).json({ error: `Error: ${error.message}` });
+  }
+});
+
 
 //DELETE MTHD --> by ID 
 router.delete('/:id', async (req, res)=>{
@@ -77,7 +79,7 @@ router.delete('/:id', async (req, res)=>{
       res.status(404).json({error: 'Galaxy with that ID does NOT exist'})
     }
   } catch (error) {
-    res.status(500).json({error: 'Error--> Could NOT delete the requested Galaxy'})
+    res.status(500).json({error: `Error: ${error.message}`})
     
   }
 })

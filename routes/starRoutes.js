@@ -11,51 +11,51 @@ router.get('/', async (req, res) => {
     const stars = await Star.findAll();
     res.json(stars);
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching Stars.' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
-// POST METHD ---------- 
+// POST METHD --> (updated type --> description)
 router.post('/', async (req, res) => {
   //try catch block
   try {
     //define fields --> model fields
-    const {name, size, type} = req.body;
-    const newStar = await Star.create({name,size,type});
+    const {name, size, description } = req.body;
+    const newStar = await Star.create({name,size,description});
     res.status(201).json(newStar);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
 //GET --> by ID 
-router.get('/:id',async(req, res)=>{
+router.get('/:id', async (req, res)=>{
   try {
     const star=await Star.findByPk(req.params.id);
     if(star){
       res.json(star);
     }else{
-      res.status(404).json({error:'Not Star with that ID Found'})
+      res.status(404).json({error:'No Star with that ID Found'})
     }
   } catch (error) {
-    res.status(500).json({error: 'Could not find star'})
+    res.status(500).json({error: `Error: ${error.message}`})
   }
 })
 
-//UPDATE / POST --> BY ID 
+//UPDATE / PUT --> BY ID (updated: type-->description)
 router.put('/:id', async (req, res) => {
   try {
     //from Model fields
-    const { name, size, type } = req.body;
+    const { name, size, description } = req.body;
     const star = await Star.findByPk(req.params.id);
     if (star) {
-      await star.update({ name, size, type });
+      await star.update({ name, size, description });
       res.json(star);
     } else {
       res.status(404).json({ error: 'Star not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error updating star' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -71,7 +71,7 @@ router.delete('/:id', async (req, res) => {
       res.status(404).json({ error: 'Sorry --> Star not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting star' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 

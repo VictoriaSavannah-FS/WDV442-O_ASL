@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Stars', // TableNAme -->Star model
           key: 'id',      // Prim K-->Star table
         },
-        allowNull: false, //required??
+        allowNull: false, //Star ID --> required
       },
       planetId: {
         type: DataTypes.INTEGER,
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Planets', // TName-->Planet model
           key: 'id',        // PK -->Planet table
         },
-        allowNull: false,//required??
+        allowNull: false,//Planet ID --> required
       },
     },
     {

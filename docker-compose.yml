@@ -28,5 +28,3 @@ services:
       DB_PASSWORD: root
       DB_NAME: spaceapidb
       DB_DIALECT: mysql
-    # Commented out for manual control:
-    # command: sh -c "npx sequelize-cli db:migrate && npm start"

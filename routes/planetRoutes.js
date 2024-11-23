@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
     res.json(planets);
   }
   catch(error){
-    res.status(500).json({ error: 'Error--> couldn't fetch Planet' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
       res.status(404).json({ error: 'Planet not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching planet' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
   res.status(201).json(newPlanet);
   }
   catch(error){
-    res.status(500).json({ error: 'Error fetching planet' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -56,7 +56,7 @@ router.put('/:id', async (req, res) => {
       res.status(404).json({ error: 'Planet not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error updating planet' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -71,7 +71,7 @@ router.delete('/:id', async (req, res) => {
       res.status(404).json({ error: 'Planet not found' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting planet' });
+    res.status(500).json({ error: `Error ${error.message}` });
   }
 });
 

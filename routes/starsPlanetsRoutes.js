@@ -11,22 +11,24 @@ router.get('/', async (req, res) =>{
     const relationships = await StarsPlanets.findAll();
     res.json(relationships);
   } catch (error) {
-    res.status(500).json({error: 'Error fetching relationships'});
-  }
-}
-
-//GET relationship --> ID 
-router.get('/:id', async (req, res)=>{
-  try {
-    const relationship = await StarsPlanets.findByPk(req.params.id);
-    if(relationship){
-      res.json(relationship);
-    }else{res.status(404).json({error: 'Relationship not found'});
-    }
-  } catch (error) {
-    res.status(500).json({error:'Error--> could NOT fetch realtionship'});
+    res.status(500).json({error: `Error: ${error.message}`});
   }
 });
+
+// GET relationship by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const relationship = await StarsPlanets.findByPk(req.params.id);
+    if (relationship) {
+      res.json(relationship);
+    } else {
+      res.status(404).json({ error: 'Relationship not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: `Error: ${error.message}` });
+  }
+});
+
 
 //POST --> NEW Relationship
 
@@ -38,7 +40,7 @@ router.post('/', async (req, res) => {
     const newRelationship = await StarsPlanets.create({ starId, planetId });
     res.status(201).json(newRelationship);
   } catch (error) {
-    res.status(500).json({ error: 'Error --> Can NOT create relationship.' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
@@ -52,29 +54,28 @@ router.put('/:id', async (req, res) => {
       await relationship.update({ starId, planetId });
       res.json(relationship);
     } else {
-      res.status(404).json({ error: 'Sorry --> Relationship not found.' });
+      res.status(404).json({ error: 'Relationship not found.' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error --> Can NOT update relationship.' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
 
-//DELETE METHOD --> by ID 
 
+// DELETE METHOD --> by ID 
 router.delete('/:id', async (req, res) => {
   try {
     const relationship = await StarsPlanets.findByPk(req.params.id);
     if (relationship) {
       await relationship.destroy();
-      res.json({ message: 'Relationship --> DELETED successfully.' });
+      res.json({ message: 'Relationship DELETED successfully.' });
     } else {
-      res.status(404).json({ error: 'Something went wrong --> Relationship not found.' });
+      res.status(404).json({ error: 'Something went wrong. Relationship not found.' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Error deleting relationship.' });
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 });
-
 
 
 
