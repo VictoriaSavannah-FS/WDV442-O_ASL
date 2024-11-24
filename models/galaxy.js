@@ -11,11 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.Galaxy.hasMany(models.Star)
-
+      models.Galaxy.hasMany(models.Star,{
+        foreingKey: 'GalaxyId',
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      });
     }
   }
-  Galaxy.init({
+
+  Galaxy.init(
+  {
     name: DataTypes.STRING,
     size: DataTypes.INTEGER,
     description: DataTypes.TEXT

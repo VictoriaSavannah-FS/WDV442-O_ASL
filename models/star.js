@@ -9,36 +9,42 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Define association
+      // Many-to-Many relationship with Planets
       models.Star.belongsToMany(models.Planet, {
-        through: models.StarsPlanets, // JoinTable:Assocaiton
+        through: models.StarsPlanets, // JoinTable:Association
         foreignKey: 'starId',         // FK:StarsPlanets->Star
         otherKey: 'planetId',         // FK:StarsPlanets-->Planet
       });
-      
-      // I forgot to include the relationship/ assocaition --> Galaxy
+
+      // BelongsTo relationship with Galaxy
       models.Star.belongsTo(models.Galaxy, {
-        foreignKey: 'GalaxyId', //creates relationship-->Star/Galaxy
+        foreignKey: 'GalaxyId', // Creates relationship → Star/Galaxy
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       });
     }
   }
+//onUpdate--> automatically updates GalaxyId->Start to match new ID
+//onDelete--> when Galaxy rec del. --> rule edits GalaxyId accordingly
 
   Star.init(
     {
       name: DataTypes.STRING,
       size: DataTypes.INTEGER,
       description: DataTypes.TEXT,
-      GalaxyId:{
+      GalaxyId: {
         type: DataTypes.INTEGER,
-        references:{
-          model: "Galaxies",//tableName-->Galaxy
-          key: 'id',        //PK-->Galaxies table
+        references: {
+          model: "Galaxies", // Table name → Galaxies
+          key: "id",         // Primary key in Galaxies
         },
+        onUpdate: "CASCADE",
+        onDelete: "SET NULL",
       },
     },
     {
       sequelize,
-      modelName: 'Star',
+      modelName: "Star",
     }
   );
 

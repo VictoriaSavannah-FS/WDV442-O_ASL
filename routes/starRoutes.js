@@ -20,8 +20,8 @@ router.post('/', async (req, res) => {
   //try catch block
   try {
     //define fields --> model fields
-    const {name, size, description } = req.body;
-    const newStar = await Star.create({name,size,description});
+    const {name, size, description, GalaxyId } = req.body;
+    const newStar = await Star.create({name,size,description, GalaxyId});
     res.status(201).json(newStar);
   } catch (error) {
     res.status(500).json({ error: `Error: ${error.message}` });
@@ -46,10 +46,10 @@ router.get('/:id', async (req, res)=>{
 router.put('/:id', async (req, res) => {
   try {
     //from Model fields
-    const { name, size, description } = req.body;
+    const { name, size, description, GalaxyId } = req.body;
     const star = await Star.findByPk(req.params.id);
     if (star) {
-      await star.update({ name, size, description });
+      await star.update({ name, size, description, GalaxyId });
       res.json(star);
     } else {
       res.status(404).json({ error: 'Star not found' });
