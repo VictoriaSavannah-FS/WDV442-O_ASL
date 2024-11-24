@@ -7,11 +7,18 @@ const express = require('express');
 const { Sequelize } = require('sequelize');
 const app = express();
 const PORT = process.env.PORT || 3000;
+//Add th TWIG template engine / setup
+
+app.set ('view engine', 'twig')
+app.set('views', './templates/views')
+console.log('Views directory:', app.get('views'));
 
 // Importing models--> dbs relaiotnship?
 const db = require('./models');
 
+
 // Middleware --> parse JSON requests
+
 app.use(express.json());
 
 // Test--> db connection ----------
@@ -40,9 +47,18 @@ app.use('/api/starsplanets', starsPlanetsRoutes);
 
 
 // Root route
-app.get('/', (req, res) => {
-  res.send('Welcome to the Space Object API!');
-});
+//app.get('/', (req, res) => {
+  //res.send('Welcome to the Space Object API!');
+//});
+
+//Homepage WELCOME Middleware
+ app.get('/', (req, res)=> {
+   res.render("home.twig", {
+     name: "SAVANNAH VICTORIA"
+
+   })
+ })
+
 
 // Start --> server
 app.listen(PORT, () => {
