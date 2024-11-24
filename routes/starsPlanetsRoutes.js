@@ -5,11 +5,17 @@ const { StarsPlanets, Star, Planet } = require ('../models');
 
 // Route for /api/starsplanets
 
-//GET --> get ALL
+//GET --> get ALL --> ADD: HTML+JSON!!!
 router.get('/', async (req, res) =>{
   try {
-    const relationships = await StarsPlanets.findAll();
-    res.json(relationships);
+    const relationships = await StarsPlanets.findAll({    
+    include: [Star, Planet], //details-->star.planet
+    });
+    if (req.headers['content-type']=== 'application/json') {
+      res.json(relationships);
+    }else{
+      res.render('StarsPlanets/index'{relationship}); //renders HTML view
+    }
   } catch (error) {
     res.status(500).json({error: `Error: ${error.message}`});
   }
