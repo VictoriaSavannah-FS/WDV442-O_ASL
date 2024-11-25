@@ -1,25 +1,17 @@
 // server.js
 require('dotenv').config();
-const express = require('express');
 
+const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8080; // port to listn on 
 
 
-//NEED to have the following:
-//- Custom HTTP header support
-//- Support for dynamic URL/path segments
-//- Proper RESTful implementation
-//- Different body payloads & data types
-//- Controller filtering, and sorting logic
-//- Usage of correct HTTP response codes
-
-//neede --> import Routes
-
-const contactRoutes = require('./routes/contactRoutes.js');
-
 // Middleware--> parse JSON requests
 app.use(express.json());
+
+
+const contactRoutes = require('./routes/contactRoutes');
+
 
 // Routes ->  Contacts API
 app.use('/api/v1', contactRoutes);
