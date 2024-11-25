@@ -6,6 +6,10 @@ require('dotenv').config();
 const express = require('express');
 const { Sequelize } = require('sequelize');
 const app = express();
+//bodyParser
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded())
+
 const PORT = process.env.PORT || 3000;
 //Add th TWIG template engine / setup
 

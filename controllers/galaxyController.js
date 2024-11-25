@@ -3,97 +3,92 @@ const { Galaxy } = require('../models'); // Import Galaxy model
 // GET --> ALL GALAXIES (Index page)
 const index = async (req, res) => {
   try {
-    const galaxies = await Galaxy.findAll(); // Fetch all galaxies
-    res.render('views/galaxy/index.twig', { galaxies }); // point to index.twig galaxies data
+    const galaxies = await Galaxy.findAll();
+    res.render('views/galaxy/index.twig', { galaxies });
   } catch (error) {
-    res.status(500).json({ error: `Error: ${error.message}` }); // Handle--> servev error
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 };
 
 // GET --> GALAXY BY ID (SHOW Page)
 const show = async (req, res) => {
   try {
-    const galaxy = await Galaxy.findByPk(req.params.id); // Find galaxy-->PK /ID
+    const galaxy = await Galaxy.findByPk(req.params.id);
     if (galaxy) {
-      res.render('views/galaxy/show.twig', { galaxy }); // point--> show page
+      res.render('views/galaxy/show.twig', { galaxy });
     } else {
-      res.status(404).render('views/error.twig', { message: 'Galaxy not found.' });
+      res.status(404).redirect('/galaxies');
     }
   } catch (error) {
-    res.status(500).json({ error: `Error: ${error.message}` }); // --> serve error
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 };
 
-// GET --> (FORM--> creating /editing galaxy)
-
+// GET --> FORM (Create/Edit)
 const form = async (req, res) => {
   try {
     if (req.params.id) {
-      // Editing--> galaxy
       const galaxy = await Galaxy.findByPk(req.params.id);
       if (!galaxy) {
-        return res.status(404).render('views/error.twig', { message: 'Galaxy not found' });
+        return res.status(404).redirect('/galaxies');
       }
-      res.render('views/galaxy/form.twig', { galaxy }); // Edit--> FORM
+      res.render('views/galaxy/form.twig', { galaxy });
     } else {
-      // Create --> NEW Galaxy
-      res.render('views/galaxy/form.twig', { galaxy: null }); // creates Empty form --> new galaxy (cofusde me)
+      res.render('views/galaxy/form.twig', { galaxy: null });
     }
   } catch (error) {
-    res.status(500).json({ error: `Error: ${error.message}` }); 
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 };
 
-// POST --> CREATE Galaxy
+// POST --> CREATE GALAXY
 const create = async (req, res) => {
   try {
-    const newGalaxy = await Galaxy.create(req.body); // Create--> NEW galaxy 
-    res.redirect(`/galaxies/${newGalaxy.id}`); // Redirect --> Show page--> New galaxy / REDIRECT
+    const newGalaxy = await Galaxy.create(req.body);
+    res.redirect(`/galaxies/${newGalaxy.id}`);
   } catch (error) {
-    res.status(500).json({ error: `Error: ${error.message}` }); // Handle --> error
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 };
 
-// PUT [Update] --> GALAXY BY ID
+// PUT --> UPDATE GALAXY
 const update = async (req, res) => {
   try {
-    const { name, size, description } = req.body; // Extract fields from request body
-    const galaxy = await Galaxy.findByPk(req.params.id); // Find galaxy by primary key (ID)
+    const { name, size, description } = req.body;
+    const galaxy = await Galaxy.findByPk(req.params.id);
 
     if (galaxy) {
-      await galaxy.update({ name, size, description }); // Update galaxy with new data
-      res.redirect(`/galaxies/${galaxy.id}`); // Redirect to the show page for the updated galaxy
+      await galaxy.update({ name, size, description });
+      res.redirect(`/galaxies/${galaxy.id}`);
     } else {
-      res.status(404).redirect('/galaxies'); // Redirect to galaxies index if not found
+      res.status(404).redirect('/galaxies');
     }
   } catch (error) {
-    res.status(500).json({ error: `Error: ${error.message}` }); // Handle server error
+    res.status(500).json({ error: `Error: ${error.message}` });
   }
 };
 
-
-// DELETE --> Remove Galaxy by ID
+// DELETE --> REMOVE GALAXY
 const remove = async (req, res) => {
   try {
-    const galaxy = await Galaxy.findByPk(req.params.id); // Find galaxy by primary key (ID)
+    const galaxy = await Galaxy.findByPk(req.params.id);
     if (galaxy) {
-      await galaxy.destroy(); // Delete the galaxy
-      res.redirect('/galaxies'); // Redirect to the index page
+      await galaxy.destroy();
+      res.redirect('/galaxies');
     } else {
-      res.status(404).redirect('/galaxies'); // Redirect --> index --> galaxy not found
+      res.status(404).redirect('/galaxies');
     }
   } catch (error) {
-    res.status(500).redirect('/galaxies'); // Redirect to index if server error occurs
+    res.status(500).redirect('/galaxies');
   }
 };
-
 
 // Export all controller functions
 module.exports = {
   index,
   show,
+  form,
   create,
   update,
   remove,
-  form,
 };

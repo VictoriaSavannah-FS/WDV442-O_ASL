@@ -1,0 +1,34 @@
+{% if product is defined %}
+  <form action="/galaxies/{{galaxy.id}}" method="POST" >
+    <input type="hidden" name="id" value"{{galaxy.id}}" />
+{% else %}
+  <form action="/galaxies/" method="POST" >
+{% endif %}
+  
+  <div class="control" >
+    <label>Name:</label>
+    <input 
+      type="text" name="name" {% if galaxy is defined %}  
+      value="{{galaxy.name}}"
+
+      {% endif %}  />
+  </div>
+  <div class="control" >
+    <label>Size:</label>
+    <input 
+      type="number" name="size" {% if galaxy is defined %}  
+      value="{{galaxy.size}}"
+      {% endif %}  />
+  </div>
+
+  <div class="control" >
+    <label>Description:</label>
+    <textarea name="description">{{galaxy.description}}</textarea> 
+  </div>
+
+<button type="submit">
+{% if galaxy is defined %} Update {% else %} Create
+   {% endif %} Galaxy
+</button>
+</form>
+
