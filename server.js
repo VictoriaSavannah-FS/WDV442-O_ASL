@@ -18,6 +18,8 @@ const db = require('./models');
 
 
 // Middleware --> parse JSON requests
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 app.use(express.json());
 

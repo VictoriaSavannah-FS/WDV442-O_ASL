@@ -14,7 +14,7 @@ router.get('/', async (req, res) =>{
     if (req.headers['content-type']=== 'application/json') {
       res.json(relationships);
     }else{
-      res.render('StarsPlanets/index'{relationship}); //renders HTML view
+      res.render('StarsPlanets/index', {relationship}); //renders HTML view
     }
   } catch (error) {
     res.status(500).json({error: `Error: ${error.message}`});
@@ -83,6 +83,8 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+//HTML 5 Specific Routes 
 
+router.get('/new', )
 
 module.exports = router;
